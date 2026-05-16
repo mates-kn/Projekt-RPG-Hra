@@ -130,27 +130,38 @@ int volbapostavy = 0;
     default:cout << "Neplatna volba" << endl;
     }
 }while (potvrzeni != 'a');
-do {
-int volbapoctu;
+do{
+int volbamista = 0;
+    cout << "\nTed jsi ve vesnici. Muzes jit do obchodu (2) nebo do areny (1), takze si vyber kam chces jit: ";
+    cin >> volbamista;
+switch (volbamista){
+    case 1:
+        do {
+int volbapoctu = 0;
 cout << "Proti kolika monstrum chces bojovat (1-3):";
 cin >> volbapoctu;
 switch (volbapoctu) {
-case 1:
-    monstra = 1;
-    MZivoty = 60 * monstra;
-    boj();
+        case 1:
+            monstra = 1;
+            MZivoty = 60 * monstra;
+            boj();
+            break;
+        case 2:
+            monstra = 2;
+            MZivoty = 60 * monstra;
+            boj();
+            break;
+        case 3:
+            monstra = 3;
+            MZivoty = 60 * monstra;
+            boj();
+            break;
+        }
+    }while (pocetzivotu > 0 && MZivoty > 0);
     break;
-case 2:
-    monstra = 2;
-    MZivoty = 60 * monstra;
-    boj();
-    break;
-case 3:
-    monstra = 3;
-    MZivoty = 60 * monstra;
-    boj();
-    break;
+    case 2:
+        cout<< "Zatim tu nic neni...\n";
 }
-}while (pocetzivotu > 0 && MZivoty > 0);
+}while (pocetzivotu > 0);
 return 0;
 }
