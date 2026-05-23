@@ -10,6 +10,12 @@ int stamina = 0;
 int monstra = 0;
 int MDamage = 0;
 int MZivoty = 0;
+        int maxpocziv = 0;
+        int maxstamina = 0;
+        int maxdamage = 0;
+        int maxschopnost = 0;
+        int penize = 0;
+        int xp = 0;
 void knight(){
     cout << endl << "KNIGHT je takova nejvic balanced class. Na zacatku hry mate tyto staty:" << endl;
     cout << "Max pocet zivotu: 100" << endl;
@@ -80,20 +86,86 @@ void boj (){
             cout << "Monstrum utoci za " << mUtok << " damage!\n";
             pocetzivotu -= mUtok;
         }
-
+if (MZivoty < 1){
+    cout <<endl<< "Vyhral jsi souboj!"<< endl;
+    penize += 100*monstra;
+}
+if (pocetzivotu < 1){
+    cout <<endl<< "Prohral jsi souboj! Bohuzel jsi umrel..."<< endl;
+}
     }while (pocetzivotu > 0 && MZivoty > 0);
+}
+void obchod(){
+    int volbaUpgr;
+    cout << "--------VITEJTE--------" << endl;
+    cout << "Mate: " <<penize<< " penez"<<endl;
+    cout << "Jaky stat si chces vylepsit: "<< endl;
+    cout << "1. volba -> +5 zivotu (cena -> 75)" << endl;
+    cout << "2. volba -> +5 stamina (cena -> 125)" << endl;
+    cout << "3. volba -> +5 damage (cena -> 100)" << endl;
+    cout << "4. volba -> +5 schopnost (cena -> 175)" << endl;
+    cout << "5. volba -> pokud nic vylepsovat nechces muzes se vratit do vesnice"<< endl;
+    cout << "Zadej volbu:";
+    cin >> volbaUpgr;
+    switch (volbaUpgr){
+case 1:
+    if (penize >= 75){
+        penize -= 75;
+        maxpocziv +=5;
+        cout << "Mas o 5 hp navic."<< endl;
+    }
+    else{
+        cout << "Nemas dost penez..."<< endl;
+    }
+    break;
+case 2:
+    if (penize >= 125){
+        penize -= 125;
+        maxstamina +=5;
+        cout << "Mas o 5 stamina navic."<< endl;
+    }
+    else{
+        cout << "Nemas dost penez..."<< endl;
+    }
+    break;
+case 3:
+    if (penize >= 100){
+        penize -= 100;
+        maxdamage +=5;
+        cout << "Budes davat o 5 damage vic."<< endl;
+    }
+    else{
+        cout << "Nemas dost penez..."<< endl;
+    }
+    break;
+case 4:
+    if (penize >= 175){
+        penize -= 175;
+        maxschopnost +=5;
+        cout << "Tvoje schopnost bude ubirat o 5 hp vic."<< endl;
+    }
+    else{
+        cout << "Nemas dost penez..."<< endl;
+    }
+    break;
+case 5:
+    break;
+default: cout << "Neplatna volba!"<< endl;
+}
 }
 int main() {
     std::srand(std::time(0));
     system("Color e0");
 cout << "AHOJ! Vitej v me hre. Nez si vyberes classu, je potreba vedet ze klasicky utok vzdy stoji 5 stamina a pouziti schopnosti stoji 25 stamina." << endl;
+cout << "A hlavne opatrne mas jen jeden pokus! Takze hlavne neumrit :D"<<endl;
 char potvrzeni;
 do{
-pocetzivotu = 0;
-damage = 0;
-stamina = 0;
-schopnost = 0;
+        maxpocziv = 0;
+        maxstamina = 0;
+        maxdamage = 0;
+        maxschopnost = 0;
 int volbapostavy = 0;
+cout << "--------------------------------------------------------------------------------"<<endl;
     cout << "Vyber si classu sve postavy:" << endl;
     cout << "1-Knight" <<endl;
     cout << "2-Tank" <<endl;
@@ -102,37 +174,45 @@ int volbapostavy = 0;
     switch (volbapostavy){
     case 1:
         knight();
-        pocetzivotu = pocetzivotu + 100;
-        stamina = stamina + 50;
-        damage = damage + 15;
-        schopnost = schopnost + 20;
+        maxpocziv += 100;
+        maxstamina += 50;
+        maxdamage += 15;
+        maxschopnost += 20;
         cout << endl << "Opravdu chces tuto postavu? (a/n): ";
         cin >> potvrzeni;
         break;
     case 2:
         tank();
-        pocetzivotu = pocetzivotu + 120;
-        stamina = stamina + 40;
-        damage = damage + 20;
-        schopnost = schopnost + 25;
+        maxpocziv += 120;
+        maxstamina += 40;
+        maxdamage += 20;
+        maxschopnost += 25;
+
         cout << endl << "Opravdu chces tuto postavu? (a/n): ";
         cin >> potvrzeni;
         break;
     case 3:
         assasin();
-        pocetzivotu = pocetzivotu + 90;
-        stamina = stamina + 60;
-        damage = damage + 10;
-        schopnost = schopnost + 15;
+        maxpocziv += 90;
+        maxstamina += 60;
+        maxdamage += 10;
+        maxschopnost += 15;
         cout << endl << "Opravdu chces tuto postavu? (a/n): ";
         cin >> potvrzeni;
         break;
     default:cout << "Neplatna volba" << endl;
     }
 }while (potvrzeni != 'a');
+cout << "---------------------------------------------------------------------"<< endl;
+cout << "Odted po kazdym souboji pujdes zpet do vesnice, lidi jsou tam moc hodni a po kazdem souboji\n ti vyleci vsechna zraneni."<<endl;
 do{
+pocetzivotu = maxpocziv;
+stamina = maxstamina;
+damage = maxdamage;
+schopnost = maxschopnost;
 int volbamista = 0;
-    cout << "\nTed jsi ve vesnici. Muzes jit do obchodu (2) nebo do areny (1), takze si vyber kam chces jit: ";
+cout << "---------------------------------------------------------------------"<< endl;
+    cout << "Muzes jit do areny (1) nebo do obchodu (2), takze si vyber kam chces jit: ";
     cin >> volbamista;
 switch (volbamista){
     case 1:
@@ -160,7 +240,8 @@ switch (volbapoctu) {
     }while (pocetzivotu > 0 && MZivoty > 0);
     break;
     case 2:
-        cout<< "Zatim tu nic neni...\n";
+        obchod();
+        break;
 }
 }while (pocetzivotu > 0);
 return 0;
