@@ -24,7 +24,7 @@ bool MB1 = false;
 int MB2Ziv = 140;
 int pocetutokuMB2 = 1;
 bool MB2 = false;
-
+bool oddoundporazen = false;
 
 
 void knight(){
@@ -54,7 +54,6 @@ void assasin(){
 
 void boj (){
     do{
-        bool revive = true;
         cout << "-------------------------------------\n";
         cout << "Tvoje zivoty: " << pocetzivotu << endl;
         cout << "Tvoje stamina: " << stamina << endl;
@@ -202,7 +201,7 @@ void miniboss2(){
 
 cout << "-------------------------------------\n";
 cout << "          !!!POZOR!!!"<<endl;
-cout << "Ted te bossfight s Minibossem 2.\n Kazdy 3 utok si dobije 10 zivotu!!!";
+cout << "Ted te ceka bossfight s Minibossem 2.\n Kazdy 3 utok si dobije 10 zivotu!!!";
     do{
         int UtokMB2 = 0;
         cout << "\n-------------------------------------\n";
@@ -263,9 +262,9 @@ cout << "Ted te bossfight s Minibossem 2.\n Kazdy 3 utok si dobije 10 zivotu!!!"
             }
         }
 if (MB2Ziv < 1){
-    cout <<endl<< "VYHRAL JSI PRVNI BOSSFIGHT! Staty se ti tentokrat doplni automaticky :)"<< endl;
+    cout <<endl<< "VYHRAL JSI DRUHY BOSSFIGHT! Staty se ti tentokrat doplni automaticky :)"<< endl;
     penize += 300;
-    xp += 350;
+    xp += 200;
     pocetzivotu = maxpocziv;
     stamina = maxstamina;
     damage = maxdamage;
@@ -279,9 +278,144 @@ if (pocetzivotu < 1){
     }while (pocetzivotu > 0 && MB2Ziv > 0);
 }
 
+void oddoundBoss(){
+    int oddoundZivoty = 300;
+    bool dvojityPrijatyDamage = false;
+    bool dvojityUtok = false;
+    do{
+        cout << "-------------------------------------\n";
+        cout << "Tvoje zivoty: " << pocetzivotu << endl;
+        cout << "Tvoje stamina: " << stamina << endl;
+        cout << "Zivoty Oddounda: " << oddoundZivoty << endl;
+        int volba;
+        int posledniDamage = 0;
+        cout << "1 - Utok (stoji 5 stamina)\n";
+        cout << "2 - Odpocinek (+10 stamina)\n";
+        cout << "3 - Schopnost (stoji 25 stamina)\n";
+        cout << "Vyber: ";
+        cin >> volba;
+        switch(volba){
+            case 1:
+                if(stamina >= 5){
+                    int bonusZakl = rand()%2;
+                    posledniDamage = damage + bonusZakl;
 
+                    if(dvojityPrijatyDamage){
+                        posledniDamage *= 2;
+                        cout << "Oddound je zranitelny! Damage je zdvojnasoben.\n";
+                        dvojityPrijatyDamage = false;
+                    }
 
+                    cout << "Utocis za " << posledniDamage << " damage!\n";
+                    oddoundZivoty -= posledniDamage;
+                    stamina -= 5;
 
+                }else{
+                    cout << "Nemas dost stamina!\n";
+                }
+                break;
+
+            case 2:
+                cout << "Odpocivas a doplnujes stamina.\n";
+                stamina += 10;
+                if(stamina > maxstamina) stamina = maxstamina;
+                break;
+
+            case 3:
+                if(stamina >= 25){
+                    int bonusSchop = rand()%2;
+                    posledniDamage = schopnost + bonusSchop;
+
+                    if(dvojityPrijatyDamage){
+                        posledniDamage *= 2;
+                        cout << "Oddound je zranitelny! Damage je zdvojnasoben.\n";
+                        dvojityPrijatyDamage = false;
+                    }
+
+                    cout << "Pouzivas schopnost za " << posledniDamage << " damage!\n";
+                    oddoundZivoty -= posledniDamage;
+                    stamina -= 25;
+
+                }else{
+                    cout << "Nemas dost stamina!\n";
+                }
+                break;
+
+            default:
+                cout << "Neplatna volba!\n";
+        }
+
+        if(posledniDamage > 0){
+            if(posledniDamage % 2 == 0){
+                cout << "Oddound obdrzel sude poskozeni!\n";
+                cout << "Pristi poskozeni ktere obdrzi bude dvojnasobne.\n";
+                dvojityPrijatyDamage = true;
+            }
+            else{
+                cout << "Oddound obdrzel liche poskozeni!\n";
+                cout << "Jeho pristi utok bude dvojnasobny.\n";
+                dvojityUtok = true;
+            }
+        }
+        if(oddoundZivoty > 0){
+            int cislo1 = rand() % 10 + 10;
+            int cislo2 = rand() % 10 + 10;
+            int oddoundDamage = 0;
+            cout << "\nOddound vylosoval: "
+                 << cislo1 << " a " << cislo2 << endl;
+            if(cislo1 % 2 != 0 && cislo2 % 2 != 0){
+                oddoundDamage = (cislo1 + cislo2) * 2;
+            }
+            else if((cislo1 % 2) != (cislo2 % 2)){
+                int liche;
+                int sude;
+                if(cislo1 % 2 != 0){
+                    liche = cislo1;
+                    sude = cislo2;
+                }else{
+                    liche = cislo2;
+                    sude = cislo1;
+                }
+                oddoundDamage = liche + 5 - sude;
+                if(oddoundDamage < 0){
+                    oddoundDamage = 0;
+                }
+            }
+            else{
+                int vetsi;
+                int mensi;
+                if(cislo1 > cislo2){
+                    vetsi = cislo1;
+                    mensi = cislo2;
+                }else{
+                    vetsi = cislo2;
+                    mensi = cislo1;
+                }
+                oddoundDamage = (vetsi - mensi) - 1;
+                if(oddoundDamage < 0){
+                    oddoundDamage = 0;
+                }
+            }
+            if(dvojityUtok){
+                oddoundDamage *= 2;
+                cout << "Oddounduv utok je zdvojnasoben!\n";
+                dvojityUtok = false;
+            }
+            cout << "Oddound utoci za "
+                 << oddoundDamage << " damage!\n";
+            pocetzivotu -= oddoundDamage;
+        }
+        if(oddoundZivoty < 1){
+            cout << endl << "Porazil jsi Oddounda! PRAVE JSI DOHRAL MOJI HRU!!!" << endl;
+            penize += 1000;
+            oddoundporazen = true;
+        }
+        if(pocetzivotu < 1){
+            cout << endl << "Prohral jsi souboj! Bohuzel jsi umrel..." << endl;
+            Hracnazivu = false;
+        }
+    }while(pocetzivotu > 0 && oddoundZivoty > 0);
+}
 
 
 void obchod(){
@@ -454,17 +588,16 @@ int volbamista = 0;
         levelUP += 50;
         }
 
-
-
-
-//s funkci continue mi pomohl ChatGPT, 2 hodiny jsem se to snazil opravit sam ale neslo mi to bez AI :(
-
 if(level == 4 && !MB1){
     miniboss1();
     continue;
 }
 if(level == 8 && !MB2){
     miniboss2();
+    continue;
+}
+if (level == 12){
+    oddoundBoss();
     continue;
 }
 cout << "---------------------------------------------------------------------"<< endl;
@@ -507,6 +640,10 @@ switch (volbapoctu) {
         break;
     default: cout<< "Neplatna volba..."<<endl;
 }
-}while (pocetzivotu > 0 && Hracnazivu);
+}while (pocetzivotu > 0 && Hracnazivu && !oddoundporazen);
+if (oddoundporazen){
+cout << endl;
+cout << endl<< "GRATULUJI TI K DOHRANI ME HRY!!! :)";
+}
 return 0;
 }
